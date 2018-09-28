@@ -36,7 +36,7 @@ static void ThansPath(std::string& file)
 }
 #endif
 
-static bool DMAttachShm(GShmem *shm, const char *file)
+static bool DMAttachShm(DMShmem *shm, const char *file)
 {
 
     std::string path = file;
@@ -87,7 +87,7 @@ static bool DMAttachShm(GShmem *shm, const char *file)
     return true;;
 }
 
-static bool DMCreateShm(GShmem *shm, const char *file, uint32_t size)
+static bool DMCreateShm(DMShmem *shm, const char *file, uint32_t size)
 {
     std::string path = file;
     ThansPath(path);
@@ -165,11 +165,11 @@ static bool DMCreateShm(GShmem *shm, const char *file, uint32_t size)
     return true;
 }
 
-GShmem DMAPI DMOpenShmem( const char *file, bool bCreate, uint32_t size  )
+DMShmem DMAPI DMOpenShmem( const char *file, bool bCreate, uint32_t size  )
 {
     if (DMShmemExist(file))
     {
-        GShmem handle;
+        DMShmem handle;
         DMAttachShm(&handle, file);
         return handle;
     }
@@ -179,13 +179,13 @@ GShmem DMAPI DMOpenShmem( const char *file, bool bCreate, uint32_t size  )
     }
     else
     {
-        return GShmem();
+        return DMShmem();
     }
 }
 
-GShmem DMAPI DMCreateShmem(const char *pFile, uint32_t size )
+DMShmem DMAPI DMCreateShmem(const char *pFile, uint32_t size )
 {
-    GShmem handle;
+    DMShmem handle;
     DMCreateShm(&handle, pFile, size);
     return handle;
 }
@@ -210,7 +210,7 @@ bool DMAPI DMShmemExist(const char *file)
 
 }
 
-void DMAPI DMCloseShmem(GShmem *shm)
+void DMAPI DMCloseShmem(DMShmem *shm)
 {
     if (shm != NULL)
     {
