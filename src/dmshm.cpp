@@ -36,7 +36,7 @@ static void ThansPath(std::string& file)
 }
 #endif
 
-static bool SDAttachShm(SShmem *shm, const char *file)
+static bool DMAttachShm(GShmem *shm, const char *file)
 {
 
     std::string path = file;
@@ -87,7 +87,7 @@ static bool SDAttachShm(SShmem *shm, const char *file)
     return true;;
 }
 
-static bool SDCreateShm(SShmem *shm, const char *file, uint32_t size)
+static bool DMCreateShm(GShmem *shm, const char *file, uint32_t size)
 {
     std::string path = file;
     ThansPath(path);
@@ -107,7 +107,7 @@ static bool SDCreateShm(SShmem *shm, const char *file, uint32_t size)
     shm->handle = CreateFileMappingA(filehandle, NULL,
                                         PAGE_READWRITE, 0, size, path.c_str());
 
-    if (shm->handle == NULL)
+    if (NULL == shm->handle)
     {
         CloseHandle(filehandle);
         return false;
@@ -115,7 +115,7 @@ static bool SDCreateShm(SShmem *shm, const char *file, uint32_t size)
 
     shm->mem = MapViewOfFile(shm->handle, FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, 0);
 
-    if (shm->mem == NULL)
+    if (NULL == shm->mem)
     {
         CloseHandle(filehandle);
         CloseHandle(shm->handle);
@@ -165,24 +165,28 @@ static bool SDCreateShm(SShmem *shm, const char *file, uint32_t size)
     return true;
 }
 
-SShmem DMAPI DMOpenShmem( const char *file, bool bCreate, uint32_t size  )
+GShmem DMAPI DMOpenShmem( const char *file, bool bCreate, uint32_t size  )
 {
     if (DMShmemExist(file))
     {
-        SShmem handle;
-        SDAttachShm(&handle, file);
+        GShmem handle;
+        DMAttachShm(&handle, file);
         return handle;
     }
-    else
+    else if(bCreate)
     {
         return DMCreateShmem(file, size);
     }
+    else
+    {
+        return GShmem();
+    }
 }
 
-SShmem DMAPI DMCreateShmem(const char *pFile, uint32_t size )
+GShmem DMAPI DMCreateShmem(const char *pFile, uint32_t size )
 {
-    SShmem handle;
-    SDCreateShm(&handle, pFile, size);
+    GShmem handle;
+    DMCreateShm(&handle, pFile, size);
     return handle;
 }
 
@@ -192,7 +196,7 @@ bool DMAPI DMShmemExist(const char *file)
     ThansPath(path);
 #if (defined(WIN32) || defined(WIN64))
 
-    DMHANDLE handle= OpenFileMappingA(FILE_MAP_READ, false, path.c_str());
+    DMHANDLE handle= OpenFileMappingA(FILE_MAP_READ | FILE_MAP_WRITE, false, path.c_str());
     bool ret = (handle!= NULL);
     CloseHandle(handle);
 
@@ -206,7 +210,7 @@ bool DMAPI DMShmemExist(const char *file)
 
 }
 
-void DMAPI DMCloseShmem(SShmem *shm)
+void DMAPI DMCloseShmem(GShmem *shm)
 {
     if (shm != NULL)
     {
