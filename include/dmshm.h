@@ -7,12 +7,24 @@
 * @brief 共享内存的结构体
 *
 */
-struct SShmem
+struct GShmem
 {
     DMHANDLE    handle;		/**<文件对应的handle*/
     void *      mem;		/**<共享内存的起始地址*/
     std::string file;		/**<共享内存对应的文件路径*/
 };
+
+/**
+* @brief 配置文件行结构
+*
+*/
+struct GShmConfig
+{
+    std::string name;       /**<共享内存的名字*/
+    int bufsize;            /**<共享内存单行字节数*/
+    int bufcount;           /**<共享内存最大行数*/
+};
+
 
 /**
 * @brief
@@ -22,7 +34,7 @@ struct SShmem
 * @param size : 共享内存大小
 * @return 共享内存的结构体
 */
-SShmem DMAPI DMOpenShmem( const char * pszFileName, bool bCreate = false, uint32_t size = 0 );
+GShmem DMAPI DMOpenShmem( const char * pszFileName, bool bCreate = false, uint32_t size = 0 );
 
 /**
 * @brief
@@ -31,7 +43,7 @@ SShmem DMAPI DMOpenShmem( const char * pszFileName, bool bCreate = false, uint32
 * @param size : 共享内存大小
 * @return 共享内存的结构体
 */
-SShmem DMAPI DMCreateShmem( const char * pszFileName, uint32_t size );
+GShmem DMAPI DMCreateShmem( const char * pszFileName, uint32_t size );
 
 /**
 * @brief
@@ -50,7 +62,7 @@ bool DMAPI DMShmemExist( const char * pszFileName );
 * @param shm : 共享内存的结构体
 * @return void
 */
-void DMAPI DMCloseShmem( SShmem * shm );
+void DMAPI DMCloseShmem( GShmem * shm );
 
 /**
 * @brief
@@ -93,7 +105,7 @@ public:
     DMHANDLE GetHandle();
 
 private:
-    SShmem m_shm;
+    GShmem m_shm;
 };
 
 #endif // __DMSHM_H_INCLUDE__
