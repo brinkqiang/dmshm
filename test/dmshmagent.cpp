@@ -22,11 +22,11 @@ bool CDMShmAgent::Init()
     m_oShmem = DMOpenShmem(m_oConfig.name.c_str());
     if (NULL == m_oShmem.mem)
     {
-        fmt::fprintf(stdout, "OpenShmem %s failed\n", m_oConfig.name.c_str());
+        std::fprintf(stdout, "OpenShmem %s failed\n", m_oConfig.name.c_str());
         return false;
     }
 
-    fmt::fprintf(stdout, "OpenShmem name=%s, bufsize=%d, bufcount=%d\n", m_oConfig.name.c_str(), m_oConfig.bufsize, m_oConfig.bufcount);
+    std::fprintf(stdout, "OpenShmem name=%s, bufsize=%d, bufcount=%d\n", m_oConfig.name.c_str(), m_oConfig.bufsize, m_oConfig.bufcount);
     return true;
 }
 
@@ -37,7 +37,7 @@ void CDMShmAgent::Log(DMLogMsgLevels level, const char *srcFilename, int srcLine
         return;
     }
     snprintf(((char*)m_oShmem.mem) + m_nIndex * m_oConfig.bufsize, m_oConfig.bufsize, "%s", message.c_str());
-    fmt::fprintf(stdout, "Log[%d]: %s\n", m_nIndex, ((char*)m_oShmem.mem) + m_nIndex * m_oConfig.bufcount);
+    std::fprintf(stdout, "Log[%d]: %s\n", m_nIndex, ((char*)m_oShmem.mem) + m_nIndex * m_oConfig.bufcount);
     m_nIndex++;
     if (m_nIndex >= m_oConfig.bufcount)
     {
@@ -62,7 +62,7 @@ bool CDMShmAgent::__LoadCSV()
     }
     catch (std::exception& e)
     {
-        fmt::fprintf(stdout, "Load %s failed. ? %s.\n", DMSHM_AGENT_CSV, e.what());
+        std::fprintf(stdout, "Load %s failed. ? %s.\n", DMSHM_AGENT_CSV, e.what());
         return false;
     }
 
