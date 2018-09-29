@@ -23,6 +23,7 @@ public:
     CDMShmServer();
 
     bool Init();
+    void UnInit();
     bool Run();
 
     virtual void ThrdProc();

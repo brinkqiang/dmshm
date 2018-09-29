@@ -29,10 +29,23 @@ bool CDMShmServer::Init()
         oInfo.m_oShmem = DMCreateShmem(oConfig.name.c_str(), oConfig.bufsize * oConfig.bufcount);
         if (NULL != oInfo.m_oShmem.mem)
         {
+            memset(oInfo.m_oShmem.mem, 0, oConfig.bufsize * oConfig.bufcount);
             fmt::fprintf(stdout, "CreateShmem name=%s, bufsize=%d, bufcount=%d\n", oConfig.name.c_str(), oConfig.bufsize, oConfig.bufcount);
         }
     }
     return true;
+}
+
+void CDMShmServer::UnInit()
+{
+    for (int i = 0; i < static_cast<int>(m_vecShmConfig.size()); ++i)
+    {
+        DMShmConfig& oConfig = m_vecShmConfig[i];
+
+        DMShmInfo& oInfo = m_mapShmInfo[oConfig.name];
+
+        DMCloseShmem(&oInfo.m_oShmem);
+    }
 }
 
 bool CDMShmServer::Run()
@@ -60,6 +73,8 @@ void CDMShmServer::ThrdProc()
         }
     }
     fmt::fprintf(stdout, "ShmServer End\n");
+
+    UnInit();
 }
 
 void CDMShmServer::Terminate()

@@ -36,7 +36,7 @@ void CDMShmAgent::Log(DMLogMsgLevels level, const char *srcFilename, int srcLine
     {
         return;
     }
-    snprintf(((char*)m_oShmem.mem) + m_nIndex * m_oConfig.bufcount, m_oConfig.bufsize, "%s", message.c_str());
+    snprintf(((char*)m_oShmem.mem) + m_nIndex * m_oConfig.bufsize, m_oConfig.bufsize, "%s", message.c_str());
     fmt::fprintf(stdout, "Log[%d]: %s\n", m_nIndex, ((char*)m_oShmem.mem) + m_nIndex * m_oConfig.bufcount);
     m_nIndex++;
     if (m_nIndex >= m_oConfig.bufcount)
