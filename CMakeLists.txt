@@ -79,3 +79,19 @@ ${CMAKE_CURRENT_SOURCE_DIR}/test/dmshmservermain.cpp)
 
 ADD_EXECUTABLE(dmshmserver ${DMSHMSERVER_SOURCES})
 TARGET_LINK_LIBRARIES(dmshmserver dmshm)
+
+ADD_CUSTOM_COMMAND(
+TARGET dmshmagent
+PRE_BUILD
+COMMAND ${CMAKE_COMMAND} -E copy_if_different
+${CMAKE_CURRENT_SOURCE_DIR}/config/dmshmagent.csv
+$<TARGET_FILE_DIR:dmshmagent>
+)
+
+ADD_CUSTOM_COMMAND(
+TARGET dmshmserver
+PRE_BUILD
+COMMAND ${CMAKE_COMMAND} -E copy_if_different
+${CMAKE_CURRENT_SOURCE_DIR}/config/dmshmserver.csv
+$<TARGET_FILE_DIR:dmshmserver>
+)

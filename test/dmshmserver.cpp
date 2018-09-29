@@ -5,7 +5,7 @@
 #include "dmutil.h"
 #include "dmformat.h"
 
-#define  GSHM_SERVER_CSV "gshmserver.csv"
+#define  DMSHM_SERVER_CSV "dmshmserver.csv"
 
 CDMShmServer::CDMShmServer()
     : m_bStop(false)
@@ -46,7 +46,7 @@ void CDMShmServer::ThrdProc()
     {
         return;
     }
-    fmt::fprintf(stdout, "GShmServer Begin\n");
+    fmt::fprintf(stdout, "ShmServer Begin\n");
     bool bBusy = false;
     while (!m_bStop) {
         bBusy = false;
@@ -59,7 +59,7 @@ void CDMShmServer::ThrdProc()
             SleepMs(1);
         }
     }
-    fmt::fprintf(stdout, "GShmServer End\n");
+    fmt::fprintf(stdout, "ShmServer End\n");
 }
 
 void CDMShmServer::Terminate()
@@ -76,7 +76,7 @@ bool CDMShmServer::__LoadCSV()
 {
     try
     {
-        std::string strPath = DMGetRootPath() + PATH_DELIMITER_STR + GSHM_SERVER_CSV;
+        std::string strPath = DMGetRootPath() + PATH_DELIMITER_STR + DMSHM_SERVER_CSV;
         csv::CSVReader reader(strPath);
         csv::CSVRow rows;
 
@@ -91,7 +91,7 @@ bool CDMShmServer::__LoadCSV()
     }
     catch (std::exception& e)
     {
-        fmt::fprintf(stdout, "Load %s failed. ? %s.\n", GSHM_SERVER_CSV, e.what());
+        fmt::fprintf(stdout, "Load %s failed. ? %s.\n", DMSHM_SERVER_CSV, e.what());
         return false;
     }
     return true;

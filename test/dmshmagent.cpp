@@ -4,7 +4,7 @@
 #include "dmutil.h"
 #include "dmcsv_parser.hpp"
 
-#define  GSHM_AGENT_CSV "gshmagent.csv"
+#define  DMSHM_AGENT_CSV "dmshmagent.csv"
 
 CDMShmAgent::CDMShmAgent()
     : m_nIndex(0)
@@ -49,7 +49,7 @@ bool CDMShmAgent::__LoadCSV()
 {
     try
     {
-        std::string strPath = DMGetRootPath() + PATH_DELIMITER_STR + GSHM_AGENT_CSV;
+        std::string strPath = DMGetRootPath() + PATH_DELIMITER_STR + DMSHM_AGENT_CSV;
         csv::CSVReader reader(strPath);
         csv::CSVRow rows;
 
@@ -62,7 +62,7 @@ bool CDMShmAgent::__LoadCSV()
     }
     catch (std::exception& e)
     {
-        fmt::fprintf(stdout, "Load %s failed. ? %s.\n", GSHM_AGENT_CSV, e.what());
+        fmt::fprintf(stdout, "Load %s failed. ? %s.\n", DMSHM_AGENT_CSV, e.what());
         return false;
     }
 
