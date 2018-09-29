@@ -55,7 +55,7 @@ bool CDMShmAgent::__LoadCSV()
 
         if (reader.read_row(rows))
         {
-            m_oConfig.name = DMGetRootPath() + PATH_DELIMITER_STR + rows["name"].get<std::string>();
+            m_oConfig.name = rows["name"].get<std::string>();
             m_oConfig.bufsize = rows["bufsize"].get<int32_t>();
             m_oConfig.bufcount = rows["bufcount"].get<int32_t>();
         }

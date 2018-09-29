@@ -82,7 +82,7 @@ bool CDMShmServer::__LoadCSV()
 
         for (size_t i = 0; reader.read_row(rows); i++) {
             DMShmConfig oConfig;
-            oConfig.name = DMGetRootPath() + PATH_DELIMITER_STR + rows["name"].get<std::string>();
+            oConfig.name = rows["name"].get<std::string>();
             oConfig.bufsize = rows["bufsize"].get<int32_t>();
             oConfig.bufcount = rows["bufcount"].get<int32_t>();
 
