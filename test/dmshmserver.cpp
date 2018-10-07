@@ -50,7 +50,7 @@ void CDMShmServer::UnInit()
 
 bool CDMShmServer::Run()
 {
-    return true;
+    return false;
 }
 
 void CDMShmServer::ThrdProc()
