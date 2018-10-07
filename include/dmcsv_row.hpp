@@ -13,6 +13,67 @@
 #include <unordered_map> // For ColNames
 #include <memory> // For CSVField
 #include <limits> // For CSVField
+#include <iostream>
+
+template <typename T = int>
+inline T __to_number(const std::string& strIn)
+{
+    return std::stoi(strIn);
+}
+
+template <>
+inline int __to_number(const std::string& strIn)
+{
+    return std::stoi(strIn);
+}
+
+template <>
+inline unsigned int __to_number(const std::string& strIn)
+{
+    return std::stoul(strIn);
+}
+
+template <>
+inline long __to_number(const std::string& strIn)
+{
+    return std::stol(strIn);
+}
+
+template <>
+inline unsigned long __to_number(const std::string& strIn)
+{
+    return std::stoul(strIn);
+}
+
+template <>
+inline long long __to_number(const std::string& strIn)
+{
+    return std::stoll(strIn);
+}
+
+template <>
+inline unsigned long long __to_number(const std::string& strIn)
+{
+    return std::stoull(strIn);
+}
+
+template <>
+inline float __to_number(const std::string& strIn)
+{
+    return std::stof(strIn);
+}
+
+template <>
+inline double __to_number(const std::string& strIn)
+{
+    return std::stod(strIn);
+}
+
+template <>
+inline long double __to_number(const std::string& strIn)
+{
+    return std::stold(strIn);
+}
 
 namespace csv {
     namespace internals {
@@ -58,10 +119,7 @@ namespace csv {
         template<typename T = std::string> T get() {
             auto dest_type = internals::type_num<T>();
             if (dest_type >= CSV_INT && is_num()) {
-                if (internals::type_num<T>() < this->type())
-                    throw std::runtime_error("Overflow error.");
-
-                return std::stol(std::string(this->sv));
+                return __to_number<T>(this->sv);
             }
 
             throw std::runtime_error("Attempted to convert a value of type " +
@@ -224,6 +282,14 @@ namespace csv {
             throw std::runtime_error("Not a number.");
 
         return std::stoull(std::string(this->sv));
+    }
+
+    template<>
+    inline double CSVField::get<double>() {
+        if (!is_num())
+            throw std::runtime_error("Not a number.");
+
+        return this->value;
     }
 
     template<>
