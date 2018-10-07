@@ -21,7 +21,8 @@ dmshm
 
 dmshmserver  
 config filename: dmshmserver.csv
-```
+```cpp
+
 #include "dmos.h"
 #include "dmutil.h"
 #include "dmtypes.h"
@@ -34,11 +35,13 @@ int main( int argc, char* argv[] )
     CDMShmServer::Instance()->WaitFor();
     return 0;
 }
+
 ```
 
 dmshmagent  
 config filename: dmshmagent.csv
-```
+```cpp
+
 #include "dmos.h"
 #include "dmutil.h"
 #include "dmtypes.h"
@@ -57,6 +60,7 @@ int main( int argc, char* argv[] )
     std::cout << fmt::format("{:%Y-%m-%d %H:%M:%S}", fmt::localtime(time(NULL))) << std::endl;
     return 0;
 }
+
 ```
 ## Contacts
 [![Join the chat](https://badges.gitter.im/brinkqiang/dmshm/Lobby.svg)](https://gitter.im/brinkqiang/dmshm)
