@@ -37,7 +37,7 @@ void CDMShmAgent::Log(DMLogMsgLevels level, const char *srcFilename, int srcLine
         return;
     }
     snprintf(((char*)m_oShmem.mem) + m_nIndex * m_oConfig.bufsize, m_oConfig.bufsize, "%s", message.c_str());
-    std::fprintf(stdout, "Log[%d]: %s\n", m_nIndex, ((char*)m_oShmem.mem) + m_nIndex * m_oConfig.bufcount);
+    std::fprintf(stdout, "Log[%d]: %s\n", m_nIndex, ((char*)m_oShmem.mem) + m_nIndex * m_oConfig.bufsize);
     m_nIndex++;
     if (m_nIndex >= m_oConfig.bufcount)
     {
