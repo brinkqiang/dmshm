@@ -20,6 +20,7 @@ Copyright (c) 2013-2018 brinkqiang (brink.qiang@gmail.com)
 dmshm
 
 dmshmserver
+config filename: dmshmserver.csv
 ```
 #include "dmos.h"
 #include "dmutil.h"
@@ -36,6 +37,7 @@ int main( int argc, char* argv[] )
 ```
 
 dmshmagent
+config filename: dmshmagent.csv
 ```
 #include "dmos.h"
 #include "dmutil.h"
