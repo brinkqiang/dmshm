@@ -63,6 +63,7 @@
 #include <direct.h>
 #include <process.h>
 #include <conio.h>
+#include <io.h>
 
 #pragma comment(lib, "ws2_32.lib")
 
