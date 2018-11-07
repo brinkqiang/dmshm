@@ -98,7 +98,8 @@ bool DMShmAgentInit();
 
 #define DMSHM_AGENT_INIT() DMShmAgentInit()
 
-#define SHM_WRITE(key, msg) CDMShmAgent::Instance()->Write(key, msg)
-#define SHM_READ(key, msg)  CDMShmAgent::Instance()->Read(key, &msg)
+#define SHM_WRITE(key, msg)   CDMShmAgent::Instance()->Write(key, msg)
+#define SHM_READ(key, msg)    CDMShmAgent::Instance()->Read(key, &msg)
+#define SHM_REMOVE(key, msg)  CDMShmAgent::Instance()->Remove(key, &msg)
 
 #endif // __GSHMAGENT_H_INCLUDE__
