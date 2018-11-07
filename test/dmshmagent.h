@@ -79,6 +79,7 @@ public:
 
     bool Write(const std::string &key, const std::string &message);
     bool Read(const std::string &key, std::string* message);
+    bool Remove(const std::string &key);
 
     DMAgentRecord* FindRecord(const std::string &key);
     void AddRecord(const std::string &key, DMAgentRecord& data);

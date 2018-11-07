@@ -111,6 +111,19 @@ bool CDMShmAgent::Read(const std::string &key, std::string* message)
     return true;
 }
 
+bool CDMShmAgent::Remove(const std::string &key)
+{
+    MapDMAgentRecordIt It = m_mapRecord.find(key);
+    if (It == m_mapRecord.end())
+    {
+        return false;
+    }
+
+    m_mapRecord.erase(key);
+
+    return true;
+}
+
 DMAgentRecord* CDMShmAgent::FindRecord(const std::string &key)
 {
     MapDMAgentRecordIt It = m_mapRecord.find(key);
