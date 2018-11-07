@@ -46,9 +46,6 @@ class HDMConsoleMgr : public TSingleton<HDMConsoleMgr> {
         signal(SIGTERM, &HDMConsoleMgr::OnConsoleEvent);
         signal(SIGBREAK, &HDMConsoleMgr::OnConsoleEvent);
         signal(SIGABRT, &HDMConsoleMgr::OnConsoleEvent);
-        if ( SIG_ERR == m_phHandler ) {
-            DMASSERT( 0 );
-        }
     }
 
     void OnCloseEvent() {
