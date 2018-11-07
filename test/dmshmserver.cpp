@@ -72,9 +72,12 @@ void CDMShmServer::ThrdProc()
             SleepMs(1);
         }
     }
-    std::fprintf(stdout, "ShmServer End\n");
+    std::fprintf(stdout, "ShmServer Ending\n");
 
     UnInit();
+
+    std::fprintf(stdout, "ShmServer End\n");
+    SleepMs(2000);
 }
 
 void CDMShmServer::Terminate()

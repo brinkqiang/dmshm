@@ -27,22 +27,109 @@ bool CDMShmAgent::Init()
     }
 
     std::fprintf(stdout, "OpenShmem name=%s, bufsize=%d, bufcount=%d\n", m_oConfig.name.c_str(), m_oConfig.bufsize, m_oConfig.bufcount);
+
+    DMAgentHead* pHead = NULL;
+    for (int i=0; i < m_oConfig.bufcount; ++i)
+    {
+        pHead = (DMAgentHead*)(m_oShmem.mem + i * m_oConfig.bufsize);
+
+        if (!pHead->flags.used)
+        {
+            continue;
+        }
+
+        DMAgentRecord oRecord((uint8_t*)(pHead));
+        AddRecord(oRecord.GetKey(), oRecord);
+    }
+
     return true;
 }
 
-void CDMShmAgent::Log(DMLogMsgLevels level, const char *srcFilename, int srcLine, const std::string &message)
+bool CDMShmAgent::Write(const std::string &key, const std::string &message)
 {
     if (NULL == m_oShmem.mem)
     {
-        return;
+        return false;
     }
-    snprintf(((char*)m_oShmem.mem) + m_nIndex * m_oConfig.bufsize, m_oConfig.bufsize, "%s", message.c_str());
-    std::fprintf(stdout, "Log[%d]: %s\n", m_nIndex, ((char*)m_oShmem.mem) + m_nIndex * m_oConfig.bufsize);
-    m_nIndex++;
-    if (m_nIndex >= m_oConfig.bufcount)
+
+    if (Full())
     {
-        m_nIndex = 0;
+        return false;
     }
+
+    DMAgentRecord* poRecord = FindRecord(key);
+    if (NULL != poRecord)
+    {
+        return false;
+    }
+
+    DMAgentHead* pHead = NULL;
+    do 
+    {
+        pHead = (DMAgentHead*)(m_oShmem.mem + m_nIndex * m_oConfig.bufsize);
+
+        if (!pHead->flags.used)
+        {
+            pHead->key_size = key.size();
+            pHead->msg_size = message.size();
+            break;
+        }
+        m_nIndex++;
+
+        if (m_nIndex >= m_oConfig.bufcount)
+        {
+            m_nIndex = 0;
+        }
+
+        if (Full())
+        {
+            return false;
+        }
+    } while (true);
+
+    memcpy(((uint8_t*)pHead) + sizeof(DMAgentHead), key.data(), key.size());
+    memcpy(((uint8_t*)pHead) + sizeof(DMAgentHead) + key.size(), message.data(), message.size());
+    pHead->flags.used = true;
+
+    DMAgentRecord oRecord((uint8_t*)(pHead));
+    AddRecord(key, oRecord);
+    return true;
+}
+
+bool CDMShmAgent::Read(const std::string &key, std::string* message)
+{
+    if (NULL == m_oShmem.mem)
+    {
+        return false;
+    }
+    DMAgentRecord* poRecord = FindRecord(key);
+    if (NULL == poRecord)
+    {
+        return false;
+    }
+    *message = std::string((char*)poRecord->GetMsg(), poRecord->GetMsgSize());
+    return true;
+}
+
+DMAgentRecord* CDMShmAgent::FindRecord(const std::string &key)
+{
+    MapDMAgentRecordIt It = m_mapRecord.find(key);
+    if (It == m_mapRecord.end())
+    {
+        return NULL;
+    }
+
+    return &It->second;
+}
+
+void CDMShmAgent::AddRecord(const std::string &key, DMAgentRecord& data)
+{
+    m_mapRecord[key] = data;
+}
+
+bool CDMShmAgent::Full()
+{
+    return m_mapRecord.size() >= m_oConfig.bufcount;
 }
 
 bool CDMShmAgent::__LoadCSV()
@@ -67,4 +154,9 @@ bool CDMShmAgent::__LoadCSV()
     }
 
     return true;
+}
+
+bool DMShmAgentInit()
+{
+    return CDMShmAgent::Instance()->Init();
 }

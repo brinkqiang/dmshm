@@ -48,7 +48,7 @@ class HDMConsoleMgr : public TSingleton<HDMConsoleMgr> {
         signal(SIGABRT, &HDMConsoleMgr::OnConsoleEvent);
     }
 
-    void OnCloseEvent() {
+    inline void OnCloseEvent() {
         if ( m_bOnce && m_pConsoleSink ) {
             m_bOnce = false;
             m_pConsoleSink->OnCloseEvent();

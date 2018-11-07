@@ -27,6 +27,47 @@ typedef enum dmlog_msg_levels_e {
     DMLOG_MSG_LEVEL_TRACE = DMLOG_LEVEL_TRACE
 } DMLogMsgLevels;
 
+typedef struct tagDMAgentHead
+{
+    uint32_t key_size;
+    uint32_t msg_size;
+
+    struct
+    {
+        uint32_t used : 1;
+    } flags;
+}DMAgentHead;
+
+struct DMAgentRecord
+{
+    DMAgentRecord()
+        : data(NULL)
+    {
+
+    }
+    DMAgentRecord(uint8_t * data_)
+        : data(data_)
+    {
+
+    }
+    DMAgentRecord(const DMAgentRecord& r)
+    {
+        data = r.data;
+    }
+    uint8_t *   data;
+
+    DMAgentHead& GetHead() { return *(DMAgentHead*)data; }
+
+    std::string GetKey(){ return std::move(std::string((char*)data + sizeof(DMAgentHead), GetHead().key_size));}
+    uint32_t GetKeySize() { return GetHead().key_size; }
+
+    uint8_t* GetMsg() { return data + sizeof(DMAgentHead) + GetKeySize(); }
+    uint32_t GetMsgSize() { return GetHead().msg_size; }
+};
+
+typedef std::map<std::string, DMAgentRecord> MapDMAgentRecord;
+typedef MapDMAgentRecord::iterator MapDMAgentRecordIt;
+
 class CDMShmAgent : 
     public CDMSafeSingleton<CDMShmAgent>
 {
@@ -35,22 +76,29 @@ public:
     CDMShmAgent();
 
     bool Init();
-    void Log(DMLogMsgLevels level, const char *srcFilename, int srcLine, const std::string &message);
+
+    bool Write(const std::string &key, const std::string &message);
+    bool Read(const std::string &key, std::string* message);
+
+    DMAgentRecord* FindRecord(const std::string &key);
+    void AddRecord(const std::string &key, DMAgentRecord& data);
+
+    bool Full();
 private:
     bool __LoadCSV();
 private:
     DMShmem m_oShmem;
     DMShmConfig m_oConfig;
     int m_nIndex;
+
+    MapDMAgentRecord m_mapRecord;
 };
 
-#define DMSHM_AGENT_INIT() if(!CDMShmAgent::Instance()->Init()){ exit(-1);}
+bool DMShmAgentInit();
 
-#define LOG_FATAL(...) CDMShmAgent::Instance()->Log(DMLOG_MSG_LEVEL_FATAL, __FILE__, __LINE__, std::move(fmt::format(__VA_ARGS__)))
-#define LOG_ERROR(...) CDMShmAgent::Instance()->Log(DMLOG_MSG_LEVEL_ERROR, __FILE__, __LINE__, std::move(fmt::format(__VA_ARGS__)))
-#define LOG_WARN(...)  CDMShmAgent::Instance()->Log(DMLOG_MSG_LEVEL_WARN,  __FILE__, __LINE__, std::move(fmt::format(__VA_ARGS__)))
-#define LOG_INFO(...)  CDMShmAgent::Instance()->Log(DMLOG_MSG_LEVEL_INFO,  __FILE__, __LINE__, std::move(fmt::format(__VA_ARGS__)))
-#define LOG_DEBUG(...) CDMShmAgent::Instance()->Log(DMLOG_MSG_LEVEL_DEBUG, __FILE__, __LINE__, std::move(fmt::format(__VA_ARGS__)))
-#define LOG_TRACE(...) CDMShmAgent::Instance()->Log(DMLOG_MSG_LEVEL_TRACE, __FILE__, __LINE__, std::move(fmt::format(__VA_ARGS__)))
+#define DMSHM_AGENT_INIT() DMShmAgentInit()
+
+#define SHM_WRITE(key, msg) CDMShmAgent::Instance()->Write(key, msg)
+#define SHM_READ(key, msg)  CDMShmAgent::Instance()->Read(key, &msg)
 
 #endif // __GSHMAGENT_H_INCLUDE__

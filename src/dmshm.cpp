@@ -49,7 +49,7 @@ static bool DMAttachShm(DMShmem *shm, const char *file)
         return false;
     }
 
-    shm->mem = MapViewOfFile(shm->handle, FILE_MAP_READ|FILE_MAP_WRITE,0,0,0);
+    shm->mem = (uint8_t*)MapViewOfFile(shm->handle, FILE_MAP_READ|FILE_MAP_WRITE,0,0,0);
 
     if (shm->mem == NULL)
     {
@@ -113,7 +113,7 @@ static bool DMCreateShm(DMShmem *shm, const char *file, uint32_t size)
         return false;
     }
 
-    shm->mem = MapViewOfFile(shm->handle, FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, 0);
+    shm->mem = (uint8_t*)MapViewOfFile(shm->handle, FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, 0);
 
     if (NULL == shm->mem)
     {
