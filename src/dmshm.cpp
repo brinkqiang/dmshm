@@ -75,8 +75,8 @@ static bool DMAttachShm(DMShmem *shm, const char *file)
         return false;
     }
 
-    shm->mem = shmat(id, NULL, 0);
-    if(shm->mem == (void*)-1)
+    shm->mem = (uint8_t*)shmat(id, NULL, 0);
+    if(shm->mem == (uint8_t*)-1)
     {
         return false;
     }
@@ -150,8 +150,8 @@ static bool DMCreateShm(DMShmem *shm, const char *file, uint32_t size)
         return false;
     }
 
-    shm->mem = shmat(id, NULL, 0);
-    if(shm->mem == (void*)-1)
+    shm->mem = (uint8_t*)shmat(id, NULL, 0);
+    if(shm->mem == ((uint8_t*))-1)
     {
         shmctl(id, IPC_RMID, NULL);
         return false;
