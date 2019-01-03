@@ -38,11 +38,8 @@ class HDMConsoleMgr : public TSingleton<HDMConsoleMgr> {
     void SetHandlerHook( IDMConsoleSink* pSink ) {
         m_pConsoleSink = pSink;
 
-        signal( SIGINT, &HDMConsoleMgr::OnConsoleEvent );
         signal(SIGINT, &HDMConsoleMgr::OnConsoleEvent);
         signal(SIGILL, &HDMConsoleMgr::OnConsoleEvent);
-        signal(SIGFPE, &HDMConsoleMgr::OnConsoleEvent);
-        signal(SIGSEGV, &HDMConsoleMgr::OnConsoleEvent);
         signal(SIGTERM, &HDMConsoleMgr::OnConsoleEvent);
         signal(SIGABRT, &HDMConsoleMgr::OnConsoleEvent);
     }
@@ -58,8 +55,6 @@ class HDMConsoleMgr : public TSingleton<HDMConsoleMgr> {
         switch ( nEventType ) {
         case SIGINT:
         case SIGILL:
-        case SIGFPE:
-        case SIGSEGV:
         case SIGTERM:
         case SIGABRT: {
             HDMConsoleMgr::Instance()->OnCloseEvent();
