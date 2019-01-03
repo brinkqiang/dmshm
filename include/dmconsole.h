@@ -61,7 +61,6 @@ class HDMConsoleMgr : public TSingleton<HDMConsoleMgr> {
         case SIGFPE:
         case SIGSEGV:
         case SIGTERM:
-        case SIGBREAK:
         case SIGABRT: {
             HDMConsoleMgr::Instance()->OnCloseEvent();
         }
