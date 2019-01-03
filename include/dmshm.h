@@ -31,7 +31,7 @@
 struct DMShmem
 {
     DMHANDLE    handle;		/**<文件对应的handle*/
-    uint8_t *   mem;		/**<共享内存的起始地址*/
+    void *   mem;		/**<共享内存的起始地址*/
     std::string file;		/**<共享内存对应的文件路径*/
 };
 

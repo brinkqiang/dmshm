@@ -31,7 +31,7 @@ bool CDMShmAgent::Init()
     DMAgentHead* pHead = NULL;
     for (int i=0; i < m_oConfig.bufcount; ++i)
     {
-        pHead = (DMAgentHead*)(m_oShmem.mem + i * m_oConfig.bufsize);
+        pHead = (DMAgentHead*)((char*)m_oShmem.mem + i * m_oConfig.bufsize);
 
         if (!pHead->flags.used)
         {
@@ -66,7 +66,7 @@ bool CDMShmAgent::Write(const std::string &key, const std::string &message)
     DMAgentHead* pHead = NULL;
     do 
     {
-        pHead = (DMAgentHead*)(m_oShmem.mem + m_nIndex * m_oConfig.bufsize);
+        pHead = (DMAgentHead*)((char*)m_oShmem.mem + m_nIndex * m_oConfig.bufsize);
 
         if (!pHead->flags.used)
         {
