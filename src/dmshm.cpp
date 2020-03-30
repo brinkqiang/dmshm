@@ -38,7 +38,6 @@ static void ThansPath(std::string& file)
 
 static bool DMAttachShm(DMShmem *shm, const char *file)
 {
-
     std::string path = file;
     ThansPath(path);
 #ifdef WIN32
@@ -91,7 +90,6 @@ static bool DMCreateShm(DMShmem *shm, const char *file, uint32_t size)
 {
     std::string path = file;
     ThansPath(path);
-
 #ifdef WIN32
     HANDLE filehandle = CreateFileA(file, GENERIC_READ | GENERIC_WRITE,
                                     FILE_SHARE_READ|FILE_SHARE_WRITE, NULL, CREATE_ALWAYS,
@@ -156,9 +154,7 @@ static bool DMCreateShm(DMShmem *shm, const char *file, uint32_t size)
         return false;
     }
     shm->handle = id;
-
 #endif
-
     shm->file = path;
 
     return true;
