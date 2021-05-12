@@ -27,8 +27,7 @@ bool CDMShmServer::Init()
         DMShmInfo& oInfo = m_mapShmInfo[oConfig.name];
         oInfo.m_oConfig = oConfig;
 
-        std::string path = DMGetRootPath() + oConfig.name;
-        oInfo.m_oShmem = DMCreateShmem(path.c_str(), oConfig.bufsize * oConfig.bufcount);
+        oInfo.m_oShmem = DMCreateShmem(oConfig.name.c_str(), oConfig.bufsize * oConfig.bufcount);
         if (NULL != oInfo.m_oShmem.mem)
         {
             memset(oInfo.m_oShmem.mem, 0, oConfig.bufsize * oConfig.bufcount);
