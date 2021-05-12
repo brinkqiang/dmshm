@@ -18,8 +18,8 @@ bool CDMShmAgent::Init()
     {
         return false;
     }
-
-    m_oShmem = DMOpenShmem(m_oConfig.name.c_str());
+    std::string path = DMGetRootPath() + m_oConfig.name;
+    m_oShmem = DMOpenShmem(path.c_str());
     if (NULL == m_oShmem.mem)
     {
         fmt::print("OpenShmem {} failed\n", m_oConfig.name.c_str());
