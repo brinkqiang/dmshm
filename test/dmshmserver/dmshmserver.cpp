@@ -3,6 +3,7 @@
 #include "dmshm.h"
 #include "dmcsv_parser.hpp"
 #include "dmutil.h"
+#include "dmformat.h"
 
 #define  DMSHM_SERVER_CSV "dmshmserver.csv"
 
@@ -29,7 +30,7 @@ bool CDMShmServer::Init()
         if (NULL != oInfo.m_oShmem.mem)
         {
             memset(oInfo.m_oShmem.mem, 0, oConfig.bufsize * oConfig.bufcount);
-            std::fprintf(stdout, "CreateShmem name=%s, bufsize=%d, bufcount=%d\n", oConfig.name.c_str(), oConfig.bufsize, oConfig.bufcount);
+            fmt::print("CreateShmem name={}, bufsize={}, bufcount={}\n", oConfig.name.c_str(), oConfig.bufsize, oConfig.bufcount);
         }
     }
     return true;
@@ -58,7 +59,7 @@ void CDMShmServer::ThrdProc()
     {
         return;
     }
-    std::fprintf(stdout, "ShmServer Begin\n");
+    fmt::print("ShmServer Begin\n");
     bool bBusy = false;
     while (!m_bStop) {
         bBusy = false;
@@ -71,11 +72,11 @@ void CDMShmServer::ThrdProc()
             SleepMs(1);
         }
     }
-    std::fprintf(stdout, "ShmServer Ending\n");
+    fmt::print("ShmServer Ending\n");
 
     UnInit();
 
-    std::fprintf(stdout, "ShmServer End\n");
+    fmt::print("ShmServer End\n");
     SleepMs(2000);
 }
 
@@ -108,7 +109,7 @@ bool CDMShmServer::__LoadCSV()
     }
     catch (std::exception& e)
     {
-        std::fprintf(stdout, "Load %s failed. ? %s.\n", DMSHM_SERVER_CSV, e.what());
+        fmt::print("Load {} failed. ? {}.\n", DMSHM_SERVER_CSV, e.what());
         return false;
     }
     return true;

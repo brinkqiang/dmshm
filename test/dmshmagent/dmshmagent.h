@@ -1,10 +1,12 @@
 
 #ifndef __GSHMAGENT_H_INCLUDE__
 #define __GSHMAGENT_H_INCLUDE__
+
 #include "dmos.h"
 #include "dmtypes.h"
 #include "dmsingleton.h"
 #include "dmshm.h"
+#include "dmformat.h"
 
 typedef struct tagDMAgentHead
 {

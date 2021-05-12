@@ -8,7 +8,7 @@ INCLUDE(cmake/ModuleCompileOptions.cmake)
 ModuleSetCompileOptions()
 
 ADD_DEFINITIONS(-DUSE_GSHMLOG)
-
+ModuleImport("dmformat" "thirdparty/dmformat")
 LibImport("dmshm" "src/dmshm")
 ExeImport("test" "dmshm")
 

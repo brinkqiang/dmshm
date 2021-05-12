@@ -22,11 +22,11 @@ bool CDMShmAgent::Init()
     m_oShmem = DMOpenShmem(m_oConfig.name.c_str());
     if (NULL == m_oShmem.mem)
     {
-        std::fprintf(stdout, "OpenShmem %s failed\n", m_oConfig.name.c_str());
+        fmt::print("OpenShmem {} failed\n", m_oConfig.name.c_str());
         return false;
     }
 
-    std::fprintf(stdout, "OpenShmem name=%s, bufsize=%d, bufcount=%d\n", m_oConfig.name.c_str(), m_oConfig.bufsize, m_oConfig.bufcount);
+    fmt::print("OpenShmem name={}, bufsize={}, bufcount={}\n", m_oConfig.name.c_str(), m_oConfig.bufsize, m_oConfig.bufcount);
 
     DMAgentHead* pHead = NULL;
     for (int i=0; i < m_oConfig.bufcount; ++i)
@@ -162,7 +162,7 @@ bool CDMShmAgent::__LoadCSV()
     }
     catch (std::exception& e)
     {
-        std::fprintf(stdout, "Load %s failed. ? %s.\n", DMSHM_AGENT_CSV, e.what());
+        fmt::print("Load {} failed. ? {}.\n", DMSHM_AGENT_CSV, e.what());
         return false;
     }
 
