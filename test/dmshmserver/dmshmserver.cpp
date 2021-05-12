@@ -3,7 +3,6 @@
 #include "dmshm.h"
 #include "dmcsv_parser.hpp"
 #include "dmutil.h"
-#include "dmformat.h"
 
 #define  DMSHM_SERVER_CSV "dmshmserver.csv"
 

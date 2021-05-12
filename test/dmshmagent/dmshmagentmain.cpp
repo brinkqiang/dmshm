@@ -2,9 +2,8 @@
 #include "dmos.h"
 #include "dmutil.h"
 #include "dmtypes.h"
-#include "dmformat.h"
 #include "dmshmagent.h"
-#include "dmtime.h"
+#include "dmformat.hpp"
 
 int main( int argc, char* argv[] )
 {

@@ -4,28 +4,7 @@
 #include "dmos.h"
 #include "dmtypes.h"
 #include "dmsingleton.h"
-#include "dmformat.h"
 #include "dmshm.h"
-
-typedef enum dmlog_levels_e {
-    DMLOG_LEVEL_OFF = -1,
-    DMLOG_LEVEL_FATAL = 0,
-    DMLOG_LEVEL_ERROR = 1,
-    DMLOG_LEVEL_WARN = 2,
-    DMLOG_LEVEL_INFO = 3,
-    DMLOG_LEVEL_DEBUG = 4,
-    DMLOG_LEVEL_TRACE = 5,
-    DMLOG_LEVEL_ALL = DMLOG_LEVEL_TRACE
-} DMLogLevels;
-
-typedef enum dmlog_msg_levels_e {
-    DMLOG_MSG_LEVEL_FATAL = DMLOG_LEVEL_FATAL,
-    DMLOG_MSG_LEVEL_ERROR = DMLOG_LEVEL_ERROR,
-    DMLOG_MSG_LEVEL_WARN = DMLOG_LEVEL_WARN,
-    DMLOG_MSG_LEVEL_INFO = DMLOG_LEVEL_INFO,
-    DMLOG_MSG_LEVEL_DEBUG = DMLOG_LEVEL_DEBUG,
-    DMLOG_MSG_LEVEL_TRACE = DMLOG_LEVEL_TRACE
-} DMLogMsgLevels;
 
 typedef struct tagDMAgentHead
 {
