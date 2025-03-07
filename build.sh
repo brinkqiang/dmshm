@@ -1,14 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 
 # - install depends tools
 # yum -y install git
 # yum -y install gcc gcc-c++ autoconf libtool automake make
-#
-
-# - clone code
-# git clone https://github.com/brinkqiang/dmshm.git
-# pushd dmshm
-# git submodule update --init --recursive
 #
 
 # pushd depends_path
@@ -17,9 +11,10 @@
 # popd
 
 rm -rf build
-mkdir build
-pushd build
+mkdir -p build
+cd build
 cmake -DCMAKE_BUILD_TYPE=relwithdebinfo ..
-make -j1
-popd
+cmake --build . --config relwithdebinfo
+cd ..
+
 # popd
