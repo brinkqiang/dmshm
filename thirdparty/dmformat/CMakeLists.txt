@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.12)
 
 PROJECT(dmformat)
 
@@ -9,4 +9,12 @@ ModuleSetCompileOptions()
 
 ADD_DEFINITIONS(-DUSE_DMFORMAT)
 
-ExeImport("test" "")
+if ( MSVC )
+    ADD_COMPILE_OPTIONS("/std:c++17")
+endif()
+
+InterfaceImport("dmformat" "include" "")
+
+if (PROJECT_IS_TOP_LEVEL)
+    ExeImport("test" "dmformat")
+endif(PROJECT_IS_TOP_LEVEL)
