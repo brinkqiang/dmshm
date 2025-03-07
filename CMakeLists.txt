@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.21)
 
-PROJECT(dmshm)
+project(dmshm)
 
-LIST(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-INCLUDE(cmake/ModuleImport.cmake)
-INCLUDE(cmake/ModuleCompileOptions.cmake)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+include(cmake/ModuleImport.cmake)
+include(cmake/ModuleCompileOptions.cmake)
 ModuleSetCompileOptions()
 
-ADD_DEFINITIONS(-DUSE_GSHMLOG)
+add_definitions(-DUSE_GSHMLOG)
 
 ModuleImport("dmformat" "thirdparty/dmformat")
 ModuleImport("dmcsv" "thirdparty/dmcsv")
@@ -15,7 +15,7 @@ ModuleImport("dmcsv" "thirdparty/dmcsv")
 LibImport("dmshm" "src/dmshm")
 ExeImport("test" "dmshm;dmcsv")
 
-ADD_CUSTOM_COMMAND(
+add_custom_command(
 TARGET dmshmagent
 PRE_BUILD
 COMMAND ${CMAKE_COMMAND} -E copy_if_different
@@ -23,7 +23,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/config/dmshmagent.csv
 $<TARGET_FILE_DIR:dmshmagent>
 )
 
-ADD_CUSTOM_COMMAND(
+add_custom_command(
 TARGET dmshmserver
 PRE_BUILD
 COMMAND ${CMAKE_COMMAND} -E copy_if_different
