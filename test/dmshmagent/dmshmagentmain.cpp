@@ -3,7 +3,7 @@
 #include "dmutil.h"
 #include "dmtypes.h"
 #include "dmshmagent.h"
-#include "dmtime.h"
+
 int main( int argc, char* argv[] )
 {
     DMSHM_AGENT_INIT();
