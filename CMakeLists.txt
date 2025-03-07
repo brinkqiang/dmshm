@@ -7,7 +7,10 @@ include(cmake/ModuleImport.cmake)
 include(cmake/ModuleCompileOptions.cmake)
 ModuleSetCompileOptions()
 
-add_definitions(-DUSE_GSHMLOG)
+
+if(msvc)
+    add_definitions(/utf-8)
+endif()
 
 ModuleImport("dmformat" "thirdparty/dmformat")
 ModuleImport("dmcsv" "thirdparty/dmcsv")
