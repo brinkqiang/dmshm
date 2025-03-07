@@ -8,9 +8,12 @@ INCLUDE(cmake/ModuleCompileOptions.cmake)
 ModuleSetCompileOptions()
 
 ADD_DEFINITIONS(-DUSE_GSHMLOG)
+
 ModuleImport("dmformat" "thirdparty/dmformat")
+ModuleImport("dmcsv" "thirdparty/dmcsv")
+
 LibImport("dmshm" "src/dmshm")
-ExeImport("test" "dmshm")
+ExeImport("test" "dmshm;dmcsv")
 
 ADD_CUSTOM_COMMAND(
 TARGET dmshmagent
