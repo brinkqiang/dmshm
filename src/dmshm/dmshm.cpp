@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "dmshm.h"
-#ifdef WIN32
+#ifdef _WIN32
 #include <Windows.h>
 #else
 #include <sys/types.h>
@@ -12,7 +12,7 @@
 #endif
 
 
-#ifdef WIN32
+#ifdef _WIN32
 static void ThansPath(std::string& file)
 {
     for (std::string::iterator itr = file.begin(); itr != file.end(); ++itr)
@@ -40,7 +40,7 @@ static bool DMAttachShm(DMShmem *shm, const char *file)
 {
     std::string path = file;
     ThansPath(path);
-#ifdef WIN32
+#ifdef _WIN32
 
     shm->handle = OpenFileMappingA(FILE_MAP_READ|FILE_MAP_WRITE, false, path.c_str());
     if (shm->handle == NULL)
@@ -90,7 +90,7 @@ static bool DMCreateShm(DMShmem *shm, const char *file, uint32_t size)
 {
     std::string path = file;
     ThansPath(path);
-#ifdef WIN32
+#ifdef _WIN32
     HANDLE filehandle = CreateFileA(file, GENERIC_READ | GENERIC_WRITE,
                                     FILE_SHARE_READ|FILE_SHARE_WRITE, NULL, CREATE_ALWAYS,
                                     FILE_ATTRIBUTE_HIDDEN, NULL);
@@ -189,7 +189,7 @@ bool DMAPI DMShmemExist(const char *file)
 {
     std::string path = file;
     ThansPath(path);
-#ifdef WIN32
+#ifdef _WIN32
     DMHANDLE handle= OpenFileMappingA(FILE_MAP_READ | FILE_MAP_WRITE, false, path.c_str());
     bool ret = (handle!= NULL);
     CloseHandle(handle);
@@ -208,7 +208,7 @@ void DMAPI DMCloseShmem(DMShmem *shm)
 {
     if (shm != NULL)
     {
-#ifdef WIN32
+#ifdef _WIN32
         UnmapViewOfFile(shm->mem);
         CloseHandle(shm->handle);
         DeleteFileA(shm->file.c_str());

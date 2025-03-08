@@ -22,7 +22,7 @@
 #ifndef __DMTYPES_H_INCLUDE__
 #define __DMTYPES_H_INCLUDE__
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <stdint.h>
 #else
 // Other compilers should have this.
