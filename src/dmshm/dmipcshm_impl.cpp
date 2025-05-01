@@ -69,3 +69,8 @@ void DMAPI dmipcshmImpl::SetDebugLevel(int level)
 {
 
 }
+
+extern "C" DMEXPORT_DLL Idmipcshm* DMAPI dmipcshmGetModule()
+{
+    return new dmipcshmImpl();
+}
