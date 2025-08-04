@@ -14,7 +14,6 @@ set(CMAKE_SHARED_LIBRARY_PREFIX "")
 ModuleImportAll("thirdparty")
 
 LibImport("dmshm" "src/dmshm")
-ExeImport("test" "dmshm;dmcsv")
 
 if(PROJECT_IS_TOP_LEVEL)
     ExeImport("test" "libdmmetainfo;dmtest")
