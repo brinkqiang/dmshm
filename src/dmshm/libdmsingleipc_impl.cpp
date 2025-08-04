@@ -1,4 +1,4 @@
-#include "libdmsingleipc_impl.h"
+﻿#include "libdmsingleipc_impl.h"
 
 DmSingleIPCImpl::DmSingleIPCImpl()
     : m_pQueue(nullptr), m_isCreator(false)

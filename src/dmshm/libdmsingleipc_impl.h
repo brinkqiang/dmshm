@@ -1,4 +1,4 @@
-#ifndef __LIBDMSINGLEIPC_IMPL_H_INCLUDE__
+﻿#ifndef __LIBDMSINGLEIPC_IMPL_H_INCLUDE__
 #define __LIBDMSINGLEIPC_IMPL_H_INCLUDE__
 
 #include "dmsingleipc.h"
