@@ -1,4 +1,4 @@
-
+ï»¿
 // Copyright (c) 2018 brinkqiang (brink.qiang@gmail.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,69 +25,69 @@
 #include <dmos.h>
 #include <dmtypes.h>
 /**
-* @brief ¹²ÏíÄÚ´æµÄ½á¹¹Ìå
+* @brief å…±äº«å†…å­˜çš„ç»“æž„ä½“
 *
 */
 struct DMShmem
 {
-    DMHANDLE    handle;		/**<ÎÄ¼þ¶ÔÓ¦µÄhandle*/
-    void *   mem;		/**<¹²ÏíÄÚ´æµÄÆðÊ¼µØÖ·*/
-    std::string file;		/**<¹²ÏíÄÚ´æ¶ÔÓ¦µÄÎÄ¼þÂ·¾¶*/
+    DMHANDLE    handle;		/**<æ–‡ä»¶å¯¹åº”çš„handle*/
+    void *   mem;		/**<å…±äº«å†…å­˜çš„èµ·å§‹åœ°å€*/
+    std::string file;		/**<å…±äº«å†…å­˜å¯¹åº”çš„æ–‡ä»¶è·¯å¾„*/
 };
 
 /**
-* @brief ÅäÖÃÎÄ¼þÐÐ½á¹¹
+* @brief é…ç½®æ–‡ä»¶è¡Œç»“æž„
 *
 */
 struct DMShmConfig
 {
-    std::string name;       /**<¹²ÏíÄÚ´æµÄÃû×Ö*/
-    int bufsize;            /**<¹²ÏíÄÚ´æµ¥ÐÐ×Ö½ÚÊý*/
-    int bufcount;           /**<¹²ÏíÄÚ´æ×î´óÐÐÊý*/
+    std::string name;       /**<å…±äº«å†…å­˜çš„åå­—*/
+    int bufsize;            /**<å…±äº«å†…å­˜å•è¡Œå­—èŠ‚æ•°*/
+    int bufcount;           /**<å…±äº«å†…å­˜æœ€å¤§è¡Œæ•°*/
 };
 
 
 /**
 * @brief
-* ´ò¿ªÒ»¸ö¹²ÏíÄÚ´æ
-* @param pszFileName : ¹²ÏíÄÚ´æÓ³ÉäÎÄ¼þ
-* @param bCreate : Èç¹ûÃ»ÓÐ¸Ã¹²ÏíÄÚ´æÊ±£¬ÊÇ·ñ´´½¨¹²ÏíÄÚ´æ
-* @param size : ¹²ÏíÄÚ´æ´óÐ¡
-* @return ¹²ÏíÄÚ´æµÄ½á¹¹Ìå
+* æ‰“å¼€ä¸€ä¸ªå…±äº«å†…å­˜
+* @param pszFileName : å…±äº«å†…å­˜æ˜ å°„æ–‡ä»¶
+* @param bCreate : å¦‚æžœæ²¡æœ‰è¯¥å…±äº«å†…å­˜æ—¶ï¼Œæ˜¯å¦åˆ›å»ºå…±äº«å†…å­˜
+* @param size : å…±äº«å†…å­˜å¤§å°
+* @return å…±äº«å†…å­˜çš„ç»“æž„ä½“
 */
 DMShmem DMAPI DMOpenShmem( const char * pszFileName, bool bCreate = false, uint32_t size = 0 );
 
 /**
 * @brief
-* ´´½¨Ò»¸ö¹²ÏíÄÚ´æ
-* @param pszFileName : ¹²ÏíÄÚ´æÓ³ÉäÎÄ¼þ
-* @param size : ¹²ÏíÄÚ´æ´óÐ¡
-* @return ¹²ÏíÄÚ´æµÄ½á¹¹Ìå
+* åˆ›å»ºä¸€ä¸ªå…±äº«å†…å­˜
+* @param pszFileName : å…±äº«å†…å­˜æ˜ å°„æ–‡ä»¶
+* @param size : å…±äº«å†…å­˜å¤§å°
+* @return å…±äº«å†…å­˜çš„ç»“æž„ä½“
 */
 DMShmem DMAPI DMCreateShmem( const char * pszFileName, uint32_t size );
 
 /**
 * @brief
-* ´´½¨Ò»¸ö¹²ÏíÄÚ´æ
-* @param file : ¹²ÏíÄÚ´æÓ³ÉäÎÄ¼þ
-* @param size : ¹²ÏíÄÚ´æ´óÐ¡
-* @return ¹²ÏíÄÚ´æµÄ½á¹¹Ìå
+* åˆ›å»ºä¸€ä¸ªå…±äº«å†…å­˜
+* @param file : å…±äº«å†…å­˜æ˜ å°„æ–‡ä»¶
+* @param size : å…±äº«å†…å­˜å¤§å°
+* @return å…±äº«å†…å­˜çš„ç»“æž„ä½“
 */
 bool DMAPI DMShmemExist( const char * pszFileName );
 
 /**
 * @brief
-* ¹Ø±ÕÒ»¸ö¹²ÏíÄÚ´æ
-* ÔÚwindows²Ù×÷ÏµÍ³ÖÐ£¬Èç¹û´ò¿ª´ÎÊýµÈÓÚ¹Ø±Õ´ÎÊý£¬ÄÚ´æ½«±»Ïú»Ù
-* ÔÚlinux²Ù×÷ÏµÍ³ÖÐ£¬ ÔòÖ±½Ó±»Ïú»Ù
-* @param shm : ¹²ÏíÄÚ´æµÄ½á¹¹Ìå
+* å…³é—­ä¸€ä¸ªå…±äº«å†…å­˜
+* åœ¨windowsæ“ä½œç³»ç»Ÿä¸­ï¼Œå¦‚æžœæ‰“å¼€æ¬¡æ•°ç­‰äºŽå…³é—­æ¬¡æ•°ï¼Œå†…å­˜å°†è¢«é”€æ¯
+* åœ¨linuxæ“ä½œç³»ç»Ÿä¸­ï¼Œ åˆ™ç›´æŽ¥è¢«é”€æ¯
+* @param shm : å…±äº«å†…å­˜çš„ç»“æž„ä½“
 * @return void
 */
 void DMAPI DMCloseShmem( DMShmem * shm );
 
 /**
 * @brief
-* ÕâÊÇÒ»¸ö¹²ÏíÄÚ´æÀà
+* è¿™æ˜¯ä¸€ä¸ªå…±äº«å†…å­˜ç±»
 */
 class CDMShmem
 {
@@ -96,32 +96,32 @@ public:
 
     /**
     * @brief
-    * ´ò¿ªÒ»¸ö¹²ÏíÄÚ´æ
-    * @param pszFileName : ÎÄ¼þÂ·¾¶
-    * @return Ö¸Ïò¹²ÏíÄÚ´æµÄÖ¸Õë
+    * æ‰“å¼€ä¸€ä¸ªå…±äº«å†…å­˜
+    * @param pszFileName : æ–‡ä»¶è·¯å¾„
+    * @return æŒ‡å‘å…±äº«å†…å­˜çš„æŒ‡é’ˆ
     */
     void * DMAPI Open( const char * pszFileName );
 
     /**
     * @brief
-    * ´´½¨Ò»¸ö¹²ÏíÄÚ´æ
-    * @param pszFileName : ÎÄ¼þÂ·¾¶
-    * @param size : ÎÄ¼þ´óÐ¡
-    * @return Ö¸Ïò¹²ÏíÄÚ´æµÄÖ¸Õë
+    * åˆ›å»ºä¸€ä¸ªå…±äº«å†…å­˜
+    * @param pszFileName : æ–‡ä»¶è·¯å¾„
+    * @param size : æ–‡ä»¶å¤§å°
+    * @return æŒ‡å‘å…±äº«å†…å­˜çš„æŒ‡é’ˆ
     */
     void * DMAPI Create( const char * pszFileName, uint32_t size );
 
     /**
     * @brief
-    * ¹Ø±Õ¹²ÏíÄÚ´æ
+    * å…³é—­å…±äº«å†…å­˜
     * @return void
     */
     void DMAPI Close();
 
     /**
     * @brief
-    * »ñÈ¡¹²ÏíÄÚ´æ¾ä±ú
-    * @return ¹²ÏíÄÚ´æ¾ä±ú
+    * èŽ·å–å…±äº«å†…å­˜å¥æŸ„
+    * @return å…±äº«å†…å­˜å¥æŸ„
     */
     DMHANDLE GetHandle();
 
