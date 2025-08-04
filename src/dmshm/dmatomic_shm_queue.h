@@ -48,7 +48,14 @@ public:
     // 禁止拷贝和移动，因为队列状态与特定内存位置绑定
     CDMSharedAtomicByteQueue(const CDMSharedAtomicByteQueue&) = delete;
     CDMSharedAtomicByteQueue& operator=(const CDMSharedAtomicByteQueue&) = delete;
+    CDMSharedAtomicByteQueue(size_t item_size, size_t item_count)
+        : item_size_(item_size),
+        capacity_(item_count + 1), // 实际容量比请求的多一个，用于区分空/满
+        head_(0),
+        tail_(0) {
+    }
 
+    ~CDMSharedAtomicByteQueue() {}
     /**
      * @brief 尝试将一个数据项推入队列。
      * @param data 指向要推入的数据的指针。
@@ -96,15 +103,7 @@ public:
     size_t get_item_size() const { return item_size_; }
 
 private:
-    // 私有构造函数，只能通过 InitAt 工厂方法调用
-    CDMSharedAtomicByteQueue(size_t item_size, size_t item_count)
-        : item_size_(item_size),
-          capacity_(item_count + 1), // 实际容量比请求的多一个，用于区分空/满
-          head_(0),
-          tail_(0) {}
 
-    // 私有析构函数，防止意外的 delete 调用
-    ~CDMSharedAtomicByteQueue() {}
 
     /**
      * @brief 获取环形缓冲区中指定索引位置的指针。

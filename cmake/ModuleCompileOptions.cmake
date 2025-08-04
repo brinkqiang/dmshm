@@ -30,14 +30,33 @@ macro(ShowEnvironment)
   message(STATUS "================================================================================")
 endmacro(ShowEnvironment)
 
+function(print_package_vars PREFIX)
+    get_cmake_property(_vars VARIABLES)
+    foreach(_var IN LISTS _vars)
+        if(_var MATCHES "^${PREFIX}")
+            message(STATUS "package ${PREFIX} -> ${_var} = ${${_var}}")
+        endif()
+    endforeach()
+endfunction()
+
 macro(ModuleSetCompileOptions)
   cmake_policy(SET CMP0022 NEW)
   include(CheckCXXCompilerFlag)
   if(POLICY CMP0048)
     cmake_policy(SET CMP0048 NEW)
   endif()
-  
+
+
   set(CMAKE_C_STANDARD 99)
+
+  set(CMAKE_BUILD_RPATH_USE_ORIGIN ON)
+  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+  
+  if(APPLE)
+    set(CMAKE_INSTALL_RPATH "@loader_path;@loader_path/../lib")  # macOS
+  elseif(UNIX)
+    set(CMAKE_INSTALL_RPATH "$ORIGIN:$ORIGIN/../lib")  # Linux
+  endif()
   
   if ("${CMAKE_BUILD_TYPE}" STREQUAL "")
     set(CMAKE_BUILD_TYPE "debug")
@@ -45,22 +64,22 @@ macro(ModuleSetCompileOptions)
 
   if (WIN32)
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/windows)
-  endif(WIN32)
+  endif()
 
   include_directories(${CMAKE_CURRENT_SOURCE_DIR}/)
   include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
   include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
   include_directories(${CMAKE_CURRENT_SOURCE_DIR}/test)
 
-  if (WIN32)
+  if (WIN32 AND NOT MINGW)
       link_directories(${CMAKE_SOURCE_DIR}/bin)
       set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
       set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
-  else(WIN32)
+  else()
       link_directories(${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})
       set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})
       set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})
-  endif(WIN32)
+  endif()
 
   if (WIN32)
     message(STATUS "Now is windows")
@@ -78,16 +97,17 @@ macro(ModuleSetCompileOptions)
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
     set(CMAKE_CXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL}")
     set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
-
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /DEBUG /OPT:REF /OPT:NOICF /STACK:16777216")
-    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /DEBUG /OPT:REF /OPT:NOICF /STACK:16777216")
-    set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS}")
+      
     link_libraries(Ws2_32)
     if(MSVC)
-      add_definitions(/bigobj)
-      add_definitions(/DNOMINMAX /DWIN32_LEAN_AND_MEAN=1 /D_CRT_SECURE_NO_WARNINGS /D_SCL_SECURE_NO_WARNINGS)
+      set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /DEBUG /OPT:REF /OPT:NOICF /STACK:16777216")
+      set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /DEBUG /OPT:REF /OPT:NOICF /STACK:16777216")
+      set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS}")
 
-      add_compile_options(/W3 /wd4005 /wd4068 /wd4244 /wd4267 /wd4800)
+      add_definitions(/bigobj)
+      add_definitions(/DNOMINMAX /DWIN32_LEAN_AND_MEAN=1 /D_CRT_SECURE_NO_WARNINGS /D_SCL_SECURE_NO_WARNINGS /D_WINSOCK_DEPRECATED_NO_WARNINGS)
+      add_definitions(/utf-8)
+      add_compile_options(/W3 /wd4005 /wd4068 /wd4244 /wd4267 /wd4800 /wd4996)
 
       check_cxx_compiler_flag("/std:c++17" COMPILER_SUPPORTS_CXX17)
       check_cxx_compiler_flag("/std:c++14" COMPILER_SUPPORTS_CXX14)
@@ -152,7 +172,7 @@ macro(ModuleSetCompileOptions)
     set(CMAKE_THREAD_LINK "")
     if(THREADS_FOUND)
       set(CMAKE_THREAD_LINK "Threads::Threads")
-    endif(THREADS_FOUND)
+    endif()
 
     link_libraries(${CMAKE_THREAD_LINK})
   elseif (UNIX)
@@ -199,40 +219,34 @@ macro(ModuleSetCompileOptions)
     set(CMAKE_THREAD_LINK "")
     if(THREADS_FOUND)
       set(CMAKE_THREAD_LINK "Threads::Threads")
-    endif(THREADS_FOUND)
+    endif()
 
     link_libraries(m ${CMAKE_THREAD_LINK})
     find_program(CCACHE_FOUND ccache)
     if(CCACHE_FOUND)
       set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
       set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
-    endif(CCACHE_FOUND)
+    endif()
   endif ()
 endmacro(ModuleSetCompileOptions)
 
 macro(ModuleSetWinCompilerFlags)
   if (WIN32)
-    set(CompilerFlags
-            CMAKE_CXX_FLAGS
-            CMAKE_CXX_FLAGS_DEBUG
-            CMAKE_CXX_FLAGS_RELEASE
-            CMAKE_CXX_FLAGS_RELWITHDEBINFO
-            CMAKE_CXX_FLAGS_MINSIZEREL
-            CMAKE_C_FLAGS
-            CMAKE_C_FLAGS_DEBUG
-            CMAKE_C_FLAGS_RELEASE
-            CMAKE_C_FLAGS_RELWITHDEBINFO
-            CMAKE_C_FLAGS_MINSIZEREL
-            )
-    foreach(CompilerFlag ${CompilerFlags})
-      string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
-    endforeach()
+    if(POLICY CMP0091)
+        cmake_policy(SET CMP0091 NEW)
+    endif()
+  
+    if (MSVC)
+        set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    endif()
   endif (WIN32)
-endmacro(ModuleSetWinCompilerFlags)
+endmacro()
 
-macro(AddInstall ModuleList)
+
+macro(AddInstall ModuleList HeadersDir)
     message(STATUS "CMAKE_SOURCE_DIR: ${CMAKE_SOURCE_DIR}")
     message(STATUS "CMAKE_BINARY_DIR: ${CMAKE_BINARY_DIR}")
+    message(STATUS "HeadersDir: ${HeadersDir}")
     message(STATUS "Install Path: ${CMAKE_INSTALL_PREFIX}/bin")
 
     message(STATUS "AddInstall ${ModuleList} ...")
@@ -249,9 +263,21 @@ macro(AddInstall ModuleList)
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
     endif(WIN32)
 
-    configure_file(
+    if (EXISTS "${HeadersDir}" AND NOT "${HeadersDir}" STREQUAL "")
+        message(STATUS "Installing headers from: ${HeadersDir}")
+        install(DIRECTORY "${HeadersDir}/"
+                DESTINATION include
+                FILES_MATCHING 
+                PATTERN "*.h"
+                PATTERN "*.hpp")
+    endif()
+
+    if(NOT TARGET uninstall)
+        message(STATUS "Adding uninstall target for the first time.")
+        configure_file(
             "${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
             "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
             IMMEDIATE @ONLY)
-    add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
-endmacro(AddInstall)
+        add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+    endif()
+endmacro()

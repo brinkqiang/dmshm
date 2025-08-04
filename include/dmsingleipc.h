@@ -1,4 +1,4 @@
-#ifndef __DMSINGLEIPC_H_INCLUDE__
+﻿#ifndef __DMSINGLEIPC_H_INCLUDE__
 #define __DMSINGLEIPC_H_INCLUDE__
 
 #include "dmos.h"
