@@ -6,8 +6,8 @@
 #
 
 # - clone code
-# git clone https://github.com/brinkqiang/dmformat.git
-# pushd dmformat
+# git clone https://github.com/brinkqiang/dmtest.git
+# pushd dmtest
 # git submodule update --init --recursive
 #
 
@@ -22,5 +22,4 @@ pushd build
 cmake -DCMAKE_BUILD_TYPE=relwithdebinfo ..
 cmake --build . --config relwithdebinfo
 popd
-
 # popd
