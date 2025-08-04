@@ -16,13 +16,12 @@ int main() {
     }
 
     const std::string shm_name = "my_test_ipc_queue";
-    const size_t item_count = 10;
 
-    // 创建IPC通道
-    if (!ipc->Create(shm_name, sizeof(MyData), item_count)) {
-        std::cerr << "Failed to create IPC channel." << std::endl;
-        return 1;
+    while (!ipc->Open(shm_name)) {
+        std::cerr << "Consumer: Failed to open IPC channel. Retrying..." << std::endl;
+        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
+
     std::cout << "Producer: IPC channel '" << shm_name << "' created." << std::endl;
 
     for (int i = 0; i < 20; ++i) {
