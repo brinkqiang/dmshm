@@ -20,7 +20,7 @@ protected:
     dmsingleipcPtr consumer_ipc_;
 
     const std::string shm_name_ = "ipc_perf_test_shm";
-    static constexpr size_t kQueueCapacity = 1024; // 队列容量
+    static constexpr size_t kQueueCapacity = 100000; // 队列容量
 
     void SetUp() override {
         // 使用您偏好的指针断言风格
