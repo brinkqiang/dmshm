@@ -22,8 +22,7 @@ int main() {
         std::cerr << "Failed to create IPC channel." << std::endl;
         return 1;
     }
-    std::cout << "Consumer: IPC channel '" << shm_name << "' opened." << std::endl;
-    
+    std::cout << "Producer: IPC channel '" << shm_name << "' created." << std::endl;
     for (int i = 0; i < 20; ++i) {
         MyData data;
         // 循环尝试弹出，直到成功（因为队列可能空了）

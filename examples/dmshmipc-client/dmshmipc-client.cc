@@ -22,7 +22,7 @@ int main() {
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
-    std::cout << "Producer: IPC channel '" << shm_name << "' created." << std::endl;
+    std::cout << "Consumer: IPC channel '" << shm_name << "' opened." << std::endl;
 
     for (int i = 0; i < 20; ++i) {
         MyData data;
