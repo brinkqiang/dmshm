@@ -16,7 +16,7 @@ ModuleImportAll("thirdparty")
 LibImport("dmshm" "src/dmshm")
 
 if(PROJECT_IS_TOP_LEVEL)
-    ExeImport("test" "libdmmetainfo;dmtest")
+    ExeImport("test" "dmcsv;dmtest")
     ExeImport("examples" "dmshm")
 
     add_custom_command(
