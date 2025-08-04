@@ -7,7 +7,6 @@
 #include "dmsingleton.h"
 #include "dmshm.h"
 #include "dmformat.h"
-#include "dmchrono.h"
 
 typedef struct tagDMAgentHead
 {

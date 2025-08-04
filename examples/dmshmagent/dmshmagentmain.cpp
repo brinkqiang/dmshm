@@ -7,7 +7,6 @@
 int main( int argc, char* argv[] )
 {
     DMSHM_AGENT_INIT();
-    fmt::print("{:%Y-%m-%d %H:%M:%S}\n", fmt::localtime(time(NULL)));
     for (int i=0; i < 10; ++i)
     {
         SHM_WRITE(fmt::format("{}", i), fmt::format("this is a test {}", i));
@@ -19,6 +18,5 @@ int main( int argc, char* argv[] )
         fmt::print("{} = {}\n", i, msg);
     }
 
-    fmt::print("{:%Y-%m-%d %H:%M:%S}\n", fmt::localtime(time(NULL)));
     return 0;
 }
