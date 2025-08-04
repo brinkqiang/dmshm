@@ -20,57 +20,14 @@
 # SOFTWARE.
 
 macro(ShowEnvironment)
-  # ====================================================================
-  #          开发者速查清单 (专业增强版 v2.0)
-  # ====================================================================
-  message(STATUS "")
-  message(STATUS "=============== Project Build Dashboard ===============")
+  message(STATUS "================================================================================")
+  get_cmake_property(_variableNames VARIABLES)
+  foreach (_variableName ${_variableNames})
+      message(STATUS "${_variableName}=${${_variableName}}")
+  endforeach()
 
-  # --- 1. 项目与路径信息 ---
-  message(STATUS "[Project] Name:           ${PROJECT_NAME}")
-  if(PROJECT_VERSION)
-      message(STATUS "[Project] Version:        ${PROJECT_VERSION}")
-  endif()
-  message(STATUS "[Project] Source Dir:     ${CMAKE_SOURCE_DIR}")
-  message(STATUS "[Project] Build Dir:      ${CMAKE_BINARY_DIR}")
-
-  # --- 2. 构建环境与架构 ---
-  message(STATUS "[Build]   Type:             ${CMAKE_BUILD_TYPE}  <-- (Important!)")
-  # 【新增】通过指针大小判断架构，8字节为64位，4字节为32位
-  if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-      message(STATUS "[Build]   Architecture:     64-bit (CMAKE_SIZEOF_VOID_P = 8)")
-  else()
-      message(STATUS "[Build]   Architecture:     32-bit (CMAKE_SIZEOF_VOID_P = 4)")
-  endif()
-  message(STATUS "[Build]   Generator:        ${CMAKE_GENERATOR}")
-  if(CMAKE_VS_PLATFORM_NAME)
-      message(STATUS "[Build]   VS Platform:      ${CMAKE_VS_PLATFORM_NAME}")
-  endif()
-
-  # --- 3. C++编译器与标准 ---
-  message(STATUS "[Compiler] CXX ID:          ${CMAKE_CXX_COMPILER_ID} (${CMAKE_CXX_COMPILER_VERSION})")
-  # 【新增】明确显示C++标准
-  if(CMAKE_CXX_STANDARD)
-      message(STATUS "[Compiler] CXX Standard:     ${CMAKE_CXX_STANDARD}")
-  else()
-      message(STATUS "[Compiler] CXX Standard:     Default")
-  endif()
-  # 【新增】对MSVC用户，显示工具集版本
-  if(MSVC)
-      message(STATUS "[Compiler] MSVC Toolset:     ${CMAKE_VS_PLATFORM_TOOLSET}")
-  endif()
-  message(STATUS "[Compiler] CXX Flags:        ${CMAKE_CXX_FLAGS}")
-  message(STATUS "[Compiler] CXX Flags (Debug):  ${CMAKE_CXX_FLAGS_DEBUG}")
-  message(STATUS "[Compiler] CXX Flags (Release):${CMAKE_CXX_FLAGS_RELEASE}")
-
-  # --- 4. 输出与安装 ---
-  message(STATUS "[Output]  Install Prefix:   ${CMAKE_INSTALL_PREFIX}")
-  message(STATUS "[Output]  Executable Suffix:${CMAKE_EXECUTABLE_SUFFIX}")
-  message(STATUS "[Output]  Shared Lib Suffix:${CMAKE_SHARED_LIBRARY_SUFFIX}")
-  message(STATUS "[Output]  Static Lib Suffix:${CMAKE_STATIC_LIBRARY_SUFFIX}")
-
-  message(STATUS "=======================================================")
-  message(STATUS "")
+  execute_process(COMMAND "${CMAKE_COMMAND}" "-E" "environment")
+  message(STATUS "================================================================================")
 endmacro(ShowEnvironment)
 
 function(print_package_vars PREFIX)
@@ -315,9 +272,12 @@ macro(AddInstall ModuleList HeadersDir)
                 PATTERN "*.hpp")
     endif()
 
-    configure_file(
+    if(NOT TARGET uninstall)
+        message(STATUS "Adding uninstall target for the first time.")
+        configure_file(
             "${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
             "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
             IMMEDIATE @ONLY)
-    add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+        add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+    endif()
 endmacro()
